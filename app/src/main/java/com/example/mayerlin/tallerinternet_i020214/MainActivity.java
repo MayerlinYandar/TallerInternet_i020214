@@ -9,9 +9,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mayerlin.tallerinternet_i020214.Model.User;
+import com.example.mayerlin.tallerinternet_i020214.Parser.Json;
 import com.example.mayerlin.tallerinternet_i020214.URL.HttpManager;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,8 +29,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loadData();
     }
-    public boolean isOnline(){
+    public void loadData(){
+        if (isOnLine()){
+            // Hacer llamado a la tarea
+            //MyTask task = new MyTask();
+            //task.execute("https://jsonplaceholder.typicode.com/posts");
+
+            MyTask task = new MyTask();
+            task.execute("http://pastoral.iucesmag.edu.co/practica/listar.php");
+        }else {
+            Toast.makeText(this, "Sin conexion", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void processData(){
+       //PASA LA LISTA AL VIEW(INTERFA<)
+        for (User str : userList){
+            textView.append(str.getNombre() + "\n");
+            textView.append(str.getCodigo()+"\n");
+            textView.append(str.getEdad()+"\n");
+            textView.append(str.getCorreo()+"\n");
+            textView.append(str.getPass()+"\n");
+        }
+    }
+    public boolean isOnLine(){
         // Hacer llamado al servicio de conectividad utilizando el ConnectivityManager
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -70,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             try {
-                postList = Json.getData(s);
+                userList = Json.getData(s);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -108,11 +135,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(String string) {
+            super.onPostExecute(string);
 
             try {
-                userList = Json.getData(s);
+                userList = Json.getData(string);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

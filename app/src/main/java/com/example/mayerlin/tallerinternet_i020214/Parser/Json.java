@@ -17,22 +17,22 @@ public class Json {
     public static List<User> getData(String content) throws JSONException {
 
         JSONArray jsonArray = new JSONArray(content);
-        
-        List<User> postList = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.length(); i++){
 
             JSONObject item = jsonArray.getJSONObject(i);
 
-            Post post = new Post();
-            post.setId(item.getInt("id"));
-            post.setTitle(item.getString("title"));
-            post.setBody(item.getString("body"));
-
-            postList.add(post);
+            User user = new User();
+            user.setNombre(item.getString("nombre"));
+           user.setCodigo(item.getString("codigo"));
+            user.setPass(item.getString("pass"));
+            user.setCorreo(item.getString("correo"));
+            user.setEdad(item.getString("edad"));
+            userList.add(user);
 
         }
 
-        return postList;
+        return userList;
     }
 }
